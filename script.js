@@ -35,11 +35,16 @@ function suffleCard() {
 // Calling shuffle card to randomize the images
 suffleCard();
 
+// to prevent misclick on mismatch
+let loading = false
+
 // function to flip the images and to match them
 function flip(element, ind) {
+  if (loading){
+    return;
+  }
   // checking that the element pair is already there or not
   if (solvedIndexes.includes(ind)) {
-    console.log("RESTRICTED");
     return;
   }
   // pushing so that user can not click it again
@@ -68,6 +73,7 @@ function flip(element, ind) {
     } else {
       solvedIndexes.pop();
       solvedIndexes.pop();
+      loading = true;
       setTimeout(() => {
         firstElement.firstChild.nextSibling.style.display = "block";
         firstElement.lastChild.previousSibling.style.display = "none";
@@ -77,12 +83,17 @@ function flip(element, ind) {
         secondValue = "";
         firstElement = "";
         secondElement = "";
+        loading = false
       }, 1500);
     }
   }
 
   // checking that the all cards are solved or not
   if (totalSolved === 12) {
+    let message = document.getElementById("heading");
+    // displaying the winning message to the user
+    message.innerText = "Congrats You Win!!!"
+
     setTimeout(() => {
       solvedIndexes = [];
       // flipping images again and resetting all the values to start new game
@@ -96,6 +107,7 @@ function flip(element, ind) {
       firstElement = "";
       secondElement = "";
       suffleCard();
-    }, 1500);
+      message.innerText = "Welcome to the Card Flip Game";
+    }, 1500);    
   }
 }
